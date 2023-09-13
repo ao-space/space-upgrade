@@ -12,15 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.19-bookworm as builder
+FROM debian:experimental as builder
 
 WORKDIR /work/
 
+RUN apt update; apt install golang-1.19 make curl wget -y
+
 COPY . .
 
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/go-1.19/bin
 RUN make -f Makefile
 
-FROM debian:12
+FROM debian:experimental
 
 ENV LANG C.UTF-8
 ENV TZ=Asia/Shanghai \
